@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.4.3    git head : adf552d8f500e7419fff395b7049228e4bc5de26
 // Component : TopLevel
-// Git hash  : f67633dea3ec6c792def237f8a4a95fb21ccf674
+// Git hash  : c0bf07cefb8627cdd0c18296f1bd9cf51313fd53
 
 
 `define fsm_enumDefinition_binary_sequential_type [2:0]
@@ -14,10 +14,14 @@
 module TopLevel (
   input               io_start,
   input      [7:0]    io_input,
+  output     [7:0]    io_output,
   input               clk,
   input               reset
 );
   wire                _zz_1;
+  wire                _zz_2;
+  wire                _zz_3;
+  reg        [7:0]    output_1;
   reg        [7:0]    m1_mat_0_0;
   reg        [7:0]    m1_mat_0_1;
   reg        [7:0]    m1_mat_0_2;
@@ -46,6 +50,8 @@ module TopLevel (
 
 
   assign _zz_1 = (fsm_counter == 8'h0f);
+  assign _zz_2 = (fsm_counter == 8'h03);
+  assign _zz_3 = (fsm_counter == 8'h0f);
   `ifndef SYNTHESIS
   always @(*) begin
     case(fsm_stateReg)
@@ -87,6 +93,7 @@ module TopLevel (
     endcase
   end
 
+  assign io_output = output_1;
   always @ (*) begin
     fsm_stateNext = fsm_stateReg;
     case(fsm_stateReg)
@@ -101,12 +108,14 @@ module TopLevel (
         end
       end
       `fsm_enumDefinition_binary_sequential_fsm_stateB : begin
-        if((fsm_counter == 8'h04))begin
+        if(_zz_2)begin
           fsm_stateNext = `fsm_enumDefinition_binary_sequential_fsm_stateC;
         end
       end
       `fsm_enumDefinition_binary_sequential_fsm_stateC : begin
-        fsm_stateNext = `fsm_enumDefinition_binary_sequential_fsm_sIdle;
+        if(_zz_3)begin
+          fsm_stateNext = `fsm_enumDefinition_binary_sequential_fsm_sIdle;
+        end
       end
       default : begin
       end
@@ -133,15 +142,19 @@ module TopLevel (
         end
         `fsm_enumDefinition_binary_sequential_fsm_stateB : begin
           fsm_counter <= (fsm_counter + 8'h01);
+          if(_zz_2)begin
+            fsm_counter <= 8'h0;
+          end
         end
         `fsm_enumDefinition_binary_sequential_fsm_stateC : begin
+          fsm_counter <= (fsm_counter + 8'h01);
+          if(_zz_3)begin
+            fsm_counter <= 8'h0;
+          end
         end
         default : begin
         end
       endcase
-      if(((! (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_stateB)) && (fsm_stateNext == `fsm_enumDefinition_binary_sequential_fsm_stateB)))begin
-        fsm_counter <= 8'h0;
-      end
     end
   end
 
@@ -151,21 +164,21 @@ module TopLevel (
       end
       `fsm_enumDefinition_binary_sequential_fsm_sLoad : begin
         m1_mat_3_3 <= io_input;
-        m1_mat_0_0 <= m1_mat_0_0;
-        m1_mat_0_1 <= m1_mat_0_1;
-        m1_mat_0_2 <= m1_mat_0_2;
+        m1_mat_0_0 <= m1_mat_0_1;
+        m1_mat_0_1 <= m1_mat_0_2;
+        m1_mat_0_2 <= m1_mat_0_3;
         m1_mat_0_3 <= m1_mat_1_0;
-        m1_mat_1_0 <= m1_mat_1_0;
-        m1_mat_1_1 <= m1_mat_1_1;
-        m1_mat_1_2 <= m1_mat_1_2;
+        m1_mat_1_0 <= m1_mat_1_1;
+        m1_mat_1_1 <= m1_mat_1_2;
+        m1_mat_1_2 <= m1_mat_1_3;
         m1_mat_1_3 <= m1_mat_2_0;
-        m1_mat_2_0 <= m1_mat_2_0;
-        m1_mat_2_1 <= m1_mat_2_1;
-        m1_mat_2_2 <= m1_mat_2_2;
+        m1_mat_2_0 <= m1_mat_2_1;
+        m1_mat_2_1 <= m1_mat_2_2;
+        m1_mat_2_2 <= m1_mat_2_3;
         m1_mat_2_3 <= m1_mat_3_0;
-        m1_mat_3_0 <= m1_mat_3_0;
-        m1_mat_3_1 <= m1_mat_3_1;
-        m1_mat_3_2 <= m1_mat_3_2;
+        m1_mat_3_0 <= m1_mat_3_1;
+        m1_mat_3_1 <= m1_mat_3_2;
+        m1_mat_3_2 <= m1_mat_3_3;
       end
       `fsm_enumDefinition_binary_sequential_fsm_stateB : begin
         m1_mat_1_0 <= m1_mat_0_0;
@@ -186,6 +199,23 @@ module TopLevel (
         m1_mat_0_3 <= m1_mat_3_3;
       end
       `fsm_enumDefinition_binary_sequential_fsm_stateC : begin
+        m1_mat_3_3 <= io_input;
+        m1_mat_0_0 <= m1_mat_0_1;
+        m1_mat_0_1 <= m1_mat_0_2;
+        m1_mat_0_2 <= m1_mat_0_3;
+        m1_mat_0_3 <= m1_mat_1_0;
+        m1_mat_1_0 <= m1_mat_1_1;
+        m1_mat_1_1 <= m1_mat_1_2;
+        m1_mat_1_2 <= m1_mat_1_3;
+        m1_mat_1_3 <= m1_mat_2_0;
+        m1_mat_2_0 <= m1_mat_2_1;
+        m1_mat_2_1 <= m1_mat_2_2;
+        m1_mat_2_2 <= m1_mat_2_3;
+        m1_mat_2_3 <= m1_mat_3_0;
+        m1_mat_3_0 <= m1_mat_3_1;
+        m1_mat_3_1 <= m1_mat_3_2;
+        m1_mat_3_2 <= m1_mat_3_3;
+        output_1 <= m1_mat_0_0;
       end
       default : begin
       end

@@ -26,8 +26,10 @@ class TopLevel extends Component {
   val io = new Bundle {
     val start = in Bool
     val input = in SInt(8 bits)
+    val output = out SInt(8 bits)
   }
 
+  val output = Reg(SInt(8 bits))
   val m1 = Matrix2D(8 bits,4,4)
 
   val fsm = new StateMachine{
@@ -51,19 +53,28 @@ class TopLevel extends Component {
       }
     }
     val stateB : State = new State{
-      onEntry(counter := 0)
       whenIsActive {
         m1.rotateDown
         counter := counter + 1
         when(counter === 3){
+          counter := 0
           goto(stateC)
         }
       }
     }
     val stateC : State = new State{
-      whenIsActive (goto(sIdle))
+      whenIsActive {
+        counter := counter + 1
+        m1.load(io.input)
+        output := m1(0,0)
+        when(counter === 15) {
+          counter := 0
+          goto(sIdle)
+        }
+      }
     }
   }
+  io.output := output
 }
 
 object test {
