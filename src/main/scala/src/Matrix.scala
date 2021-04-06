@@ -2,13 +2,14 @@ package spinal.lib.Matrix
 
 import spinal.core._
 import spinal.lib._
+import spinal.core.sim._
 
 case class Matrix2D(
   width : BitCount,
   m : Int,
   n : Int
-) extends ImplicitArea[Vec[Vec[SInt]]] {
-  val mat = Vec(Vec(Reg(SInt(width)),n),m)
+) extends ImplicitArea[Vec[Vec[SInt]]] {//Bundle {
+  val mat = Vec(Vec(Reg(SInt(width)),n),m) simPublic
 
   def apply(range1 : Range, range2 : Range): Vec[Vec[SInt]] = {
     Vec(range1.map(x => Vec(range2.map(y => mat(x)(y)).toList)).toList)
@@ -24,6 +25,18 @@ case class Matrix2D(
 
   def apply(range1 : Int, range2 : Int): SInt = {
     mat(range1)(range2)
+  }
+
+  def load(input : SInt) = {
+    mat(m-1)(n-1) := input
+    for(i <- 0 until m) {
+      for(j <- 0 until n - 1) {
+        mat(i)(j) := mat(i)(j+1)
+      }
+      if(i != m-1) {
+        mat(i)(n-1) := mat(i+1)(0)
+      }
+    }
   }
 
   def * (that : Matrix2D): Matrix2D = {
@@ -118,6 +131,15 @@ case class Matrix2D(
 
   override def implicitValue: Vec[Vec[SInt]] = this.mat
 
+  def printMat : Unit = {
+    for(i <- 0 until m) {
+      for(j <- 0 until n) {
+        print(mat(i)(j).toInt+",")
+      }
+      print("\n")
+    }
+    print("-------------\n")
+  }
   //def  (that : Matrix): Matrix = {
 
   //}
